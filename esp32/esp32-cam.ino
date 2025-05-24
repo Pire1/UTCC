@@ -1,18 +1,3 @@
-/****************************************************************************************************************************************************
-
- ****************************************************************************************************************************************************/
-
-  /********************************************************************************************************************
- *  Board Settings:
- *  Board: "ESP32 Wrover Module"
- *  Upload Speed: "921600"
- *  Flash Frequency: "80MHz"
- *  Flash Mode: "QIO"
- *  Partition Scheme: "Hue APP (3MB No OTA/1MB SPIFFS)"
- *  Core Debug Level: "None"
- *  COM Port: Depends *On Your System*
- *********************************************************************************************************************/
- 
 #include "src/OV2640.h"
 #include <WiFi.h>
 #include <WebServer.h>
@@ -22,8 +7,6 @@
 #include "src/OV2640Streamer.h"
 #include "src/CRtspSession.h"
 
-//#define ENABLE_OLED //if want use oled ,turn on thi macro
-//#define SOFTAP_MODE // If you want to run our own softap turn this on
 #define ENABLE_WEBSERVER
 #define ENABLE_RTSPSERVER
 
@@ -33,7 +16,7 @@
 #define I2C_SDA 14
 #define I2C_SCL 13
 SSD1306Wire display(OLED_ADDRESS, I2C_SDA, I2C_SCL, GEOMETRY_128_32);
-bool hasDisplay; // we probe for the device at runtime
+bool hasDisplay; 
 #endif
 
 // Select camera model
