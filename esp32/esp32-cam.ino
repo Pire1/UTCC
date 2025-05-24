@@ -59,7 +59,7 @@ WiFiServer rtspServer(8554);
 #ifdef SOFTAP_MODE
 IPAddress apIP = IPAddress(192, 168, 0, 110);
 #else
-#include "wifikeys.h"
+#include "wifi.h"
 #endif
 
 #ifdef ENABLE_WEBSERVER
