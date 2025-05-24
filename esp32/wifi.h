@@ -1,2 +1,2 @@
-const char *ssid =     "A";         // Put your SSID here
-const char *password = "123123123";      // Put your PASSWORD here
+const char *ssid =     "SSID";         // Put your SSID here
+const char *password = "PASSWORD";      // Put your PASSWORD here
