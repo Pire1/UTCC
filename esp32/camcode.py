@@ -1,5 +1,5 @@
-from ultralytics import YOLO
-import cv2
+from ultralytics import YOLO    #IMPORTโมเดลyoloเข้ามาสำหรับobj dect
+import cv2  #ใช้แสดงภาพ 
 
 # โหลดโมเดล 
 model = YOLO("yolov8n.pt")
