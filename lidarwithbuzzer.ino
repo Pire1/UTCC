@@ -1,34 +1,42 @@
-#include <Wire.h>        // Wire library สำหรับ I2C
+#include <Wire.h>    // Wire library สำหรับ I2C
 #include <TFLI2C.h>      // TF Luna I2C library 
 
-TFLI2C tflI2C;       //โมเดลที่ใช้สื่อสารกับSensor
+TFLI2C tflI2C;   //โมเดลที่ใช้สื่อสารกับSensor
+int16_t tfDist;   // ระยะทาง (cm)
+int16_t tfAddr = TFL_DEF_ADR;   // ที่อยู่ I2C ของเซนเซอร์
 
-int16_t tfDist;                    // ระยะทาง (cm)
-int16_t tfAddr = TFL_DEF_ADR;      // ที่อยู่ I2C ของเซนเซอร์
-
-const int buzzerPin = 8;           // ขา buzzer (เช่น D8)
-const int threshold = 500;          // ระยะที่ต้องการให้ buzzer ทำงาน (cm)
+const int buzzerPin = 8;
+const int minDist = 50;     // ใกล้ที่สุดที่สนใจ (cm)
+const int maxDist = 500;    // ไกลที่สุดที่สนใจ (cm)
+const int minFreq = 50;    // ความถี่ต่ำสุด (Hz)
+const int maxFreq = 2000;   // ความถี่สูงสุด (Hz)
 
 void setup() {
-  Serial.begin(115200);     // เปิด Serial Monitor
-  Wire.begin();             // เริ่มต้น I2C
-  pinMode(buzzerPin, OUTPUT); // ตั้งขา buzzer เป็น OUTPUT
+  Serial.begin(115200);
+  Wire.begin();  //เริ่มI2C
+  pinMode(buzzerPin, OUTPUT);   // ตั้งขา buzzer เป็น OUTPUT
 }
 
 void loop() {
   if (tflI2C.getData(tfDist, tfAddr)) {
-    Serial.println(String(tfDist) + " cm / " + String(tfDist / 2.54) + " inches");
+    Serial.print("Distance: ");  
+    Serial.print(tfDist);   //ระยะทาง
+    Serial.println(" cm");
 
-    if (tfDist < threshold) {
-      digitalWrite(buzzerPin, HIGH);  // เปิดเสียงถ้าใกล้เกินไป
+    if (tfDist > 0 && tfDist < maxDist) {
+      // Mapping ระยะเป็นความถี่: ยิ่งใกล้ ยิ่งเสียงสูง
+      int freq = map(tfDist, maxDist, minDist, minFreq, maxFreq);
+      freq = constrain(freq, minFreq, maxFreq);  // ป้องกันความถี่เกินขอบเขต
+
+      tone(buzzerPin, freq);
     } else {
-      digitalWrite(buzzerPin, LOW);   // ปิดเสียงถ้าไกลพอ
+      noTone(buzzerPin);
     }
+
   } else {
     Serial.println("Failed to read from LiDAR");
-    digitalWrite(buzzerPin, LOW); // ความปลอดภัย: ปิด buzzer ถ้าอ่านไม่ได้
+    noTone(buzzerPin);
   }
 
-  delay(50); // รอ 50 ms
+  delay(50);
 }
-
